@@ -22,16 +22,18 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-
+global $DB;
 
 $PAGE->set_url(new moodle_url('/local/message/manage.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title(get_string('manage_messages', 'local_message'));
 
+$messages = $DB->get_records('local_message');
+
 echo $OUTPUT->header();
 
 $templatecontext = (object)[
-  'texttodisplay' => 'Lista de todas as mensagens',
+  'messages' => array_values($messages),
 ];
 
 echo $OUTPUT->render_from_template('local_message/manage', $templatecontext);
