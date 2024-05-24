@@ -34,6 +34,8 @@ echo $OUTPUT->header();
 
 $templatecontext = (object)[
   'messages' => array_values($messages),
+  'editurl' => new moodle_url('/local/message/edit.php'),
+
 ];
 
 echo $OUTPUT->render_from_template('local_message/manage', $templatecontext);

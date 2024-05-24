@@ -30,7 +30,7 @@ global $DB;
 
 $PAGE->set_url(new moodle_url('/local/message/edit.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title(get_string('Editar'));
+$PAGE->set_title(get_string('Edit'));
 
 
 // We want to display our form.
