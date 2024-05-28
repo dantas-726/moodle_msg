@@ -17,26 +17,31 @@
 
 /**
  * @package     local_message
- * @author      Pedro
+ * @author      Kristian
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_message\form;
+use local_message\manager;
 use moodleform;
 
 require_once("$CFG->libdir/formslib.php");
 
-class edit extends moodleform {
-    //Add elements to form
+class bulkedit extends moodleform {
     public function definition() {
-        global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('hidden', 'id');
-        $mform->setType('id', PARAM_INT);
-        $mform->addElement('text', 'messagetext', get_string('message_text', 'local_message')); // Add elements to your form
-        $mform->setType('messagetext', PARAM_NOTAGS);                   //Set type of element
-        $mform->setDefault('messagetext', get_string('enter_message', 'local_message'));        //Default value
+        // Display the list of messages with a checkbox.
+        $manager = new manager();
+        $messages = $manager->get_all_messages();
+
+        $messagegroup = [];
+        foreach ($messages as $message) {
+            $messagegroup[] = $mform->createElement('advcheckbox', 'messageid' . $message->id, $message->messagetext);
+        }
+        $mform->addGroup($messagegroup, 'messages', get_string('choose_messages', 'local_message'), '<br>');
+
+        $mform->addElement('static', 'todo', get_string('whattodo', 'local_message'));
 
         $choices = array();
         $choices['0'] = \core\output\notification::NOTIFY_WARNING;
@@ -45,6 +50,8 @@ class edit extends moodleform {
         $choices['3'] = \core\output\notification::NOTIFY_INFO;
         $mform->addElement('select', 'messagetype', get_string('message_type', 'local_message'), $choices);
         $mform->setDefault('messagetype', '3');
+
+        $mform->addElement('advcheckbox', 'deleteall', get_string('delete_all_selected', 'local_message'), get_string('yes'));
 
         $this->add_action_buttons();
     }

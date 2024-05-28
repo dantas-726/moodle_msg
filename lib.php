@@ -23,11 +23,9 @@ function local_message_before_footer() {
 
   global $DB, $USER;
 
-  $messages = $DB->get_records('local_message');
-
-  $sql = "SELECT lm.id, lm.messagetext FROM {local_message} lm left outer join
-  {local_message_read} lmr ON lm.id = lmr.messageid WHERE lmr.userid 
-  <> :userid OR lmr.userid IS NULL";
+  $sql = "SELECT lm.id, lm.messagetext FROM {local_message} lm 
+  LEFT OUTER JOIN {local_message_read} lmr ON lm.id = lmr.messageid 
+  WHERE lmr.userid <> :userid OR lmr.userid IS NULL";
 
   $params = [
     'userid' => $USER->id,
@@ -42,11 +40,11 @@ function local_message_before_footer() {
       $type =  \core\output\notification::NOTIFY_WARNING;
       ;
     }
-    if ($message->messagetype === 1) {
+    if ($message->messagetype === '1') {
       $type = \core\output\notification::NOTIFY_SUCCESS;
     }
 
-    if ($message->messagetype === 2) {
+    if ($message->messagetype === '2') {
       $type = \core\output\notification::NOTIFY_ERROR;
     }
     \core\notification::add($message->messagetext, $type);

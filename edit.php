@@ -40,8 +40,11 @@ $mform = new edit();
 // Form processing and displaying is done here.
 
 if ($mform->is_cancelled()) {
+
  // Go back to the manage.php page 
+
    redirect($CFG->wwwroot . '/local/message/manage.php', 'Você cancelou a mensagem');
+   
 } else if ($fromform = $mform->get_data()) {
   // When the form is submitted, and the data is successfully validated,
   // the `get_data()` function will return the data posted in the form.
